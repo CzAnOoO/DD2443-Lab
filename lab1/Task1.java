@@ -10,16 +10,14 @@ public class Task1 implements Runnable {
         }
     }
 
-    public static void main(String[] args) {
-        Runnable task1 = new Task1();
+    static long run_experiment(int n) {
 
-        int n = 4;
+        long startTime = System.nanoTime();
 
-        if (args.length > 0) {
-            n = Integer.parseInt(args[0]);
-        }
-
+        /* ----------- task1b  ----------- */
         Thread ts[] = new Thread[n];
+
+        Runnable task1 = new Task1();
 
         for (int i = 0; i < n; i++) {
             ts[i] = new Thread(task1);
@@ -34,8 +32,39 @@ public class Task1 implements Runnable {
                 e.printStackTrace();
             }
         }
+        /* ----------- ------ ----------- */
+        long endTime = System.nanoTime();
+        // System.out.println("current a :" + a);
+        a = 0;
 
-        System.out.println("value of a: " + a);
+        return (endTime - startTime) / 1_000_000;
     }
 
+    public static void main(String[] args) {
+        int n = 4;
+        int x = 2;
+        int y = 1;
+
+        if (args.length > 0) {
+            n = Integer.parseInt(args[0]);
+            x = Integer.parseInt(args[1]);
+            y = Integer.parseInt(args[2]);
+        }
+
+        // Runnable task1x[] = new Runnable[x];
+        // Runnable task1y[] = new Runnable[y];
+        Runnable task1 = new Task1();
+
+        for (int i = 0; i < x; i++) {
+            run_experiment(n);
+        }
+
+        long time = 0;
+        for (int i = 0; i < y; i++) {
+            time += run_experiment(n);
+        }
+        time = time / (long) y;
+
+        System.out.println("time(ms): " + time);
+    }
 }
