@@ -51,20 +51,21 @@ public class Task1 implements Runnable {
             y = Integer.parseInt(args[2]);
         }
 
-        // Runnable task1x[] = new Runnable[x];
-        // Runnable task1y[] = new Runnable[y];
         Runnable task1 = new Task1();
 
-        for (int i = 0; i < x; i++) {
-            run_experiment(n);
-        }
+        for (int j = 0; j < 64; j++) {
+            for (int i = 0; i < x; i++) {
+                run_experiment(j);
+            }
 
-        long time = 0;
-        for (int i = 0; i < y; i++) {
-            time += run_experiment(n);
-        }
-        time = time / (long) y;
+            long time = 0;
+            for (int i = 0; i < y; i++) {
+                time += run_experiment(j);
+            }
+            time = time / (long) y;
 
-        System.out.println("time(ms): " + time);
+            // System.out.println("time(ms): " + time);
+            System.out.println(j + " : " + time);
+        }
     }
 }
