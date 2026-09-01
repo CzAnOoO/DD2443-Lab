@@ -4,7 +4,7 @@ public class Task1 implements Runnable {
     static volatile int a;
 
     @Override
-    public void run() {
+    public synchronized void run() {
         for (int i = 0; i < 1_000_000; i++) {
             a++;
         }
