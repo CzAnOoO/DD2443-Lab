@@ -12,10 +12,11 @@ public class Main {
 
 		public void run() {
 			try {
+				semaphore.s_wait();
+				System.out.println(Thread.currentThread().getName() + " start");
+				Thread.sleep(1000);
+				System.out.println(Thread.currentThread().getName() + " finish");
 				semaphore.signal();
-				System.out.println("Thread start:" + Thread.currentThread().threadId() + "start");
-				Thread.sleep(100);
-				System.out.println("Thread: " + Thread.currentThread().threadId() + "finish");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -34,7 +35,7 @@ public class Main {
 		Thread ts[] = new Thread[x];
 
 		for (int i = 0; i < x; i++) {
-			ts[i] = new Thread(r);
+			ts[i] = new Thread(r, "thread " + String.valueOf(i));
 			ts[i].start();
 		}
 		Thread.sleep(50);

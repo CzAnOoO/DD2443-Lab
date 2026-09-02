@@ -1,7 +1,7 @@
 public class CountingSemaphore {
 
-	volatile int semaphore = 0;
-	public int n;
+	public volatile int semaphore = 0;
+	int n;
 
 	public int getSemaphore() {
 		synchronized (this) {
@@ -12,17 +12,18 @@ public class CountingSemaphore {
 	public CountingSemaphore(int n) {
 		// TODO
 		this.n = n;
+		this.semaphore = n;
 	}
 
 	public void signal() throws InterruptedException {
 		// TODO
 		synchronized (this) {
 			semaphore++;
-			if (semaphore > n) {
+			if (semaphore - 1 < 0) {
+				notify();
+			} else if (semaphore > n) {
 				semaphore--;
 				wait();
-			} else if (semaphore - 1 < 0) {
-				notify();
 			}
 		}
 	}
