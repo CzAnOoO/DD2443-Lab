@@ -3,9 +3,11 @@ public class MainB {
 	static volatile int a;
 
 	public static class Incrementer implements Runnable {
-		public synchronized void run() {
+		public void run() {
 			for (int i = 0; i < 1_000_000; i++) {
-				a++;
+				synchronized (this) {
+					a++;
+				}
 			}
 		}
 	}

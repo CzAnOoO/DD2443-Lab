@@ -3,21 +3,23 @@ public class MainC {
 	static volatile int a;
 
 	public static class Incrementer implements Runnable {
-		public synchronized void run() {
+		public void run() {
 			for (int i = 0; i < 1_000_000; i++) {
-				a++;
+				synchronized (this) {
+					a++;
+				}
 			}
 		}
 	}
 
 	static long run_experiment(int n) {
 
-		long startTime = System.nanoTime();
-
 		/* ----------- task1b  ----------- */
 		Thread ts[] = new Thread[n];
 
 		Runnable task1 = new Incrementer();
+
+		long startTime = System.nanoTime();
 
 		for (int i = 0; i < n; i++) {
 			ts[i] = new Thread(task1);
@@ -41,13 +43,16 @@ public class MainC {
 	}
 
 	public static void main(String[] args) {
-		int x = 2;
+		int x = 1;
 		int y = 1;
 
-		if (args.length > 0) {
+		if (args.length > 1) {
 			x = Integer.parseInt(args[0]);
 			y = Integer.parseInt(args[1]);
 		}
+
+		// System.out.println(x);
+		// System.out.println(y);
 
 		for (int n = 1; n <= 64; n *= 2) {
 			for (int i = 0; i < x; i++) {
@@ -55,13 +60,27 @@ public class MainC {
 			}
 
 			long time = 0;
-			for (int i = 0; i < y; i++) {
-				time += run_experiment(n);
-			}
-			time = time / (long) y;
 
+			/* Standard Deviation */
+			// https://www.baeldung.com/java-calculate-standard-deviation 
+
+			long nums[] = new long[y];
+			for (int i = 0; i < y; i++) {
+				nums[i] = run_experiment(n);
+				time += nums[i];
+			}
+			double mean = (double) time / y; // mean
+
+			double squareds = 0.0;
+			double standardDeviation = 0.0;
+
+			for (long num : nums) {
+				squareds += Math.pow(num - mean, 2);
+			}
+
+			standardDeviation = Math.sqrt(squareds / y);
 			// System.out.println("time(ms): " + time);
-			System.out.println(n + "  " + time);
+			System.out.println(n + "  " + time + "   " + standardDeviation);
 		}
 	}
 }
