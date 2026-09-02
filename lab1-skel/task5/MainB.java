@@ -1,5 +1,4 @@
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.Random;
 import java.util.concurrent.locks.Condition;
 
 public class MainB {
