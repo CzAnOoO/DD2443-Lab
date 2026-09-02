@@ -21,9 +21,6 @@ public class CountingSemaphore {
 			semaphore++;
 			if (semaphore - 1 < 0) {
 				notify();
-			} else if (semaphore > n) {
-				semaphore--;
-				wait();
 			}
 		}
 	}
