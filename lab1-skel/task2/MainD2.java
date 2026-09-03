@@ -1,4 +1,4 @@
-public class MainD {
+public class MainD2 {
 
     static volatile int sharedInt = 0;
     static volatile boolean done = false;
@@ -7,12 +7,8 @@ public class MainD {
 
     static class Incrementer implements Runnable {
 
-        private final Object object;
 
-        public Incrementer(Object obj) {
-            this.object = obj;
-
-        }
+    
 
         @Override
         public void run() {
@@ -21,40 +17,29 @@ public class MainD {
                     sharedInt++;
                 }
                 startTime = System.nanoTime();
-            synchronized (this.object) {
                 done = true;
-                object.notify();
 
-            }
+            
 
         }
     }
 
     static class Printer implements Runnable {
 
-        private final Object object;
-
-        public Printer(Object obj) {
-            this.object = obj;
-
-        }
+    
 
         @Override
         public void run() {
-            synchronized (this.object) {
+            
 
                 while (!done) {
-                    try {
-                        object.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    
                 }
                 long current = System.nanoTime();
                 delay = current - startTime;
                 //System.out.println("sharedInt: " + sharedInt);
 
-            }
+            
 
         }
     }
@@ -70,9 +55,8 @@ public class MainD {
             sharedInt = 0;
             done = false;
 
-            final Object obj = new Object();
-            Thread incrementingThread = new Thread(new Incrementer(obj));
-            Thread printingThread = new Thread(new Printer(obj));
+            Thread incrementingThread = new Thread(new Incrementer());
+            Thread printingThread = new Thread(new Printer());
 
             incrementingThread.start();
             printingThread.start();
@@ -92,7 +76,7 @@ public class MainD {
 
         }
 
-        System.out.println("Guarded Block Average Delay: " + (totalDelay / measuredCount) + " ns");
+        System.out.println("Busy waiting Average Delay: " + (totalDelay / measuredCount) + " ns");
     }
 
 }
