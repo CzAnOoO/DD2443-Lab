@@ -43,8 +43,6 @@ public class MainB {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 }

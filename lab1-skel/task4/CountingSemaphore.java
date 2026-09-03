@@ -29,7 +29,7 @@ public class CountingSemaphore {
 		// TODO
 		synchronized (this) {
 			semaphore--;
-			if (semaphore < 0) {
+			while (semaphore < 0) {
 				wait();
 			}
 		}
