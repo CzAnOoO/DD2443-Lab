@@ -33,8 +33,9 @@ public class MainA {
             printingThread.start();
 
             try {
-                incrementingThread.join();
                 printingThread.join();
+                incrementingThread.join();
+
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

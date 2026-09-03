@@ -14,11 +14,12 @@ public class MainC {
 
         public void run() {
 
-            synchronized (this.object) {
+            
                 for (int i = 0; i < 1_000_000; i++) {
                     sharedInt++;
                 }
-
+                
+                synchronized (this.object) {
                 done = true;
                 object.notify();
 
