@@ -11,10 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
     private final Condition notEmpty = lock.newCondition();
 
 	private int capacity = 0;
-	private int putIndex = 0;
-    private int takeIndex = 0;
 	private boolean closed;
-	private int items;
 
 	public Buffer(int size) {
 		// TODO
