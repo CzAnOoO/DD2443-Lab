@@ -1,4 +1,6 @@
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 
 public class MainB {
@@ -7,8 +9,10 @@ public class MainB {
 
 	static volatile Boolean chopsticks[] = new Boolean[n]; // true = Upplockad, false = på bordet
 	// static ReentrantLock[] locks = new ReentrantLock[n];
-	static ReentrantLock lock = new ReentrantLock();
-	static Condition[] notPicked = new Condition[n];
+	static ReentrantLock lock = new ReentrantLock(true);
+	// static Condition[] notPicked = new Condition[n];
+	static Condition condition = lock.newCondition();
+	static Queue<Integer> queue = new ArrayDeque<>();
 
 	public static class Philosopher implements Runnable {
 		int id;
@@ -24,11 +28,12 @@ public class MainB {
 		boolean canPick() throws InterruptedException {
 			lock.lock();
 			try {
-				// väntar om en av ätpinnarna på ena sidan är upptagen
-				while (chopsticks[left] || chopsticks[right]) {
-					notPicked[id].await();
+				// väntar om en av ätpinnarna på ena sidan är upptagen (och om det inte är din tur)
+				while (queue.peek() != id || chopsticks[left] || chopsticks[right]) {
+					// notPicked[id].await();
+					condition.await();
 				}
-
+				queue.remove();
 				chopsticks[left] = true;
 				chopsticks[right] = true;
 			} finally {
@@ -38,20 +43,22 @@ public class MainB {
 		}
 
 		void eat() throws InterruptedException {
+			queue.add(id);
 			if (canPick()) {
+				Thread.sleep((int) (Math.random() * 201) + 200);
 				lock.lock();
 				try {
-					System.out.println(Thread.currentThread().getName() + "eat");
+					System.out.println(Thread.currentThread().getName() + " eat");
 					chopsticks[left] = false;
 					chopsticks[right] = false;
 
-					notPicked[(id - 1 + n) % n].signal(); // left
-					notPicked[(id + 1) % n].signal(); // right
+					// notPicked[(id - 1 + n) % n].signal(); // left
+					// notPicked[(id + 1) % n].signal(); // right
+					condition.signalAll();
 
 				} finally {
 					lock.unlock();
 				}
-				Thread.sleep((int) (Math.random() * 201) + 200);
 			}
 		}
 
@@ -75,7 +82,7 @@ public class MainB {
 		for (int i = 0; i < n; i++) {
 			// locks[i] = new ReentrantLock();
 			chopsticks[i] = false;
-			notPicked[i] = lock.newCondition();
+			// notPicked[i] = lock.newCondition();
 		}
 
 		for (int i = 0; i < n; i++) {
