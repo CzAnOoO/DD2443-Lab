@@ -80,7 +80,7 @@ public class MainC {
 
 			standardDeviation = Math.sqrt(squareds / y);
 			// System.out.println("time(ms): " + time);
-			System.out.println(n + "  " + time + "   " + standardDeviation);
+			System.out.println(n + "  " + mean + "   " + standardDeviation / mean);
 		}
 	}
 }

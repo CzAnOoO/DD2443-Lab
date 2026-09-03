@@ -1,7 +1,7 @@
 public class CountingSemaphore {
 
-	public volatile int semaphore = 0;
-	int n;
+	volatile int semaphore = 0;
+	// int n;
 
 	public int getSemaphore() {
 		synchronized (this) {
@@ -11,7 +11,7 @@ public class CountingSemaphore {
 
 	public CountingSemaphore(int n) {
 		// TODO
-		this.n = n;
+		// this.n = n;
 		this.semaphore = n;
 	}
 
