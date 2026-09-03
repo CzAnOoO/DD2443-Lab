@@ -1,0 +1,12 @@
+#!/bin/bash -l
+# Name of job
+#SBATCH -J lab1
+#SBATCH -A edu26.dd2443
+# Reservation if needed
+#SBATCH -t 00:01:00
+#SBATCH -p shared
+#SBATCH -n 1
+# load modules and run
+ml PDC/26.03
+# most javac MainC.java first
+srun -n 1 java MainC 6 2 > pdc.dat
