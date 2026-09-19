@@ -105,7 +105,12 @@ public class ExecutorServiceSort implements Sorter {
                         if (deepT > 0) {
                                 deepT--;
                                 // Step 2: Recurse on the left sub-array (elements before pivot)
+                                // quicksort(array, low, pivot_index - 1, deepT);
                                 Future<?> left = pool.submit(new Worker(array, low, pivot_index - 1, pool, deepT));
+
+                                // Step 3: Recurse on the right sub-array (elements after pivot)
+                                //Future<?> right = pool.submit(new Worker(array, pivot_index + 1, high, pool, deepT));
+                                quicksort(array, pivot_index + 1, high, deepT);
 
                                 try {
                                         left.get();
@@ -114,12 +119,10 @@ public class ExecutorServiceSort implements Sorter {
                                         e.printStackTrace();
                                         // TODO: handle exception
                                 }
-                        } else {
-                                quicksort(array, low, pivot_index - 1, deepT);
+                                return;
                         }
 
-                        // Step 3: Recurse on the right sub-array (elements after pivot)
-                        // Future<?> right = pool.submit(new Worker(array, pivot_index + 1, high, pool));
+                        quicksort(array, low, pivot_index - 1, deepT);
                         quicksort(array, pivot_index + 1, high, deepT);
                 }
         }
