@@ -1,0 +1,12 @@
+#!/bin/bash -l
+# Name of job
+#SBATCH -J lab1
+#SBATCH -A edu26.dd2443
+# Reservation if needed
+#SBATCH -t 00:40:00
+#SBATCH -p shared
+#SBATCH -n 1
+#SBATCH -c 96
+# load modules and run
+ml java/21
+srun ./run.sh > pdc_raw22.dat

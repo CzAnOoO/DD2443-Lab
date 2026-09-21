@@ -1,12 +1,14 @@
-# Average execution times of incrementers with N threads
+# Average execution times (ms) of incrementers with N threads
 # Note: This is placeholder data
-# Sequential, Thread, ExecutorService, ForkJoinPool, ParallelStream
-# N     Seq     T       ES      FJP     PS
-1       3000    3220    3403    3328    3228
-2       3000    2230    2303    2228    2328
-4       3000    1200    1203    1228    1228
-8       3000    900     982     990     890
-16      3000    804     806     810     710
-32      3000    405     407     410     510
-48      3000    195     196     199     299
-96      3000    100     104     101     101
+# Sequential, Thread, ExecutorService, ForkJoinPool, ParallelStream, JavaSort
+# N   Seq    ES     FJP   PS    JS
+1     1104   1118   1018  1012  900
+2     1104   847    561   682   473
+4     1104   664    333   426   241
+8     1104   524    203   248   117
+16    1104   413    136   162   57
+32    1104   347    108   126   38
+48    1104   353    104   120   31
+64    1104   297    108   116   30
+96    1104   297    104   119   29
+
