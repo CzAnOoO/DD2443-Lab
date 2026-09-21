@@ -69,9 +69,9 @@ public class ExecutorServiceSort implements Sorter {
 
                 public int partition(int[] array, int low, int high) {
                         // Pick the last element as pivot (or median of three)
-                        // int middle = low + (high - low) / 2;
+                        int mid = low + (high - low) / 2;
+                        swap(array, mid, high);
                         int pivot = array[high];
-                        // swap(array,middle,high);
 
                         // Boundary pointer for elements <= pivot
                         int i = low - 1;

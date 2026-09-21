@@ -52,9 +52,9 @@ public class ParallelStreamSort implements Sorter {
 
         public int partition(int[] array, int low, int high) {
                 // Pick the last element as pivot (or median of three)
-                // int middle = low + (high - low) / 2;
+                int mid = low + (high - low) / 2;
+                swap(array, mid, high);
                 int pivot = array[high];
-                // swap(array,middle,high);
 
                 // Boundary pointer for elements <= pivot
                 int i = low - 1;
@@ -83,14 +83,14 @@ public class ParallelStreamSort implements Sorter {
                 // Step 1: Pick a pivot and rearrange elements around it in-place
                 int pivot_index = partition(array, low, high);
 
-                // if (high - low < 4096) {
-                //         // Step 2: Recurse on the left sub-array (elements before pivot)
-                //         quicksort(array, low, pivot_index - 1);
+                if (high - low < 4096) {
+                        // Step 2: Recurse on the left sub-array (elements before pivot)
+                        quicksort(array, low, pivot_index - 1);
 
-                //         // Step 3: Recurse on the right sub-array (elements after pivot)
-                //         quicksort(array, pivot_index + 1, high);
-                //         return;
-                // }
+                        // Step 3: Recurse on the right sub-array (elements after pivot)
+                        quicksort(array, pivot_index + 1, high);
+                        return;
+                }
 
                 Runnable[] tasks = {
                                 () -> quicksort(array, low, pivot_index - 1),
