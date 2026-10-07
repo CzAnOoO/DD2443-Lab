@@ -1,0 +1,15 @@
+# Average execution times (s) of incrementers with N threads
+# Column 1: Threads
+# Column 2: LocalLog Uniform 1:1:8 = A1
+# Column 3: LocalLog Uniform 1:1:0 = A2
+# Column 4: GlobalLog Uniform 1:1:8 = B1
+# Column 5: GlobalLog Uniform 1:1:0 = B2 
+# N    A1     A2      B1       B2       
+1      0.7732   1.3661   0.8507   1.3818
+2      1.0400   1.7058   1.4849   1.9424
+4      1.3961   1.8784   2.0201   2.6526
+8      1.6041   2.1176   3.6591   3.3327
+16     1.7216   2.2867   11.4502  10.7308
+32     2.1773   2.8984   28.1245  29.7053
+48     2.8044   3.6392   48.3947  49.6498
+64     3.5222   4.8237   66.4394  63.7753

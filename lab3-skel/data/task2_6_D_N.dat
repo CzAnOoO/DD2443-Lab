@@ -1,0 +1,15 @@
+# Average discrepancy count of incrementers with N threads
+# Column 1: Threads
+# Column 2: LocalLog Normal 1:1:8 = A1
+# Column 3: LocalLog Normal 1:1:0 = A2
+# Column 4: GlobalLog Normal 1:1:8 = B1
+# Column 5: GlobalLog Normal 1:1:0 = B2 
+# N    A1     A2      B1     B2       
+1      0.0    0.0     0.0     0.0
+2      0.2    0.4     0.2     0.0
+4      0.6    6.0     0.2     4.8
+8      6.4   29.2     1.2    16.4
+16    22.6  125.4     2.4    31.2
+32   105.0  548.0     3.6    38.4
+48   288.2 1253.2    10.4    90.4
+64   402.8 1914.4    18.8   128.4
