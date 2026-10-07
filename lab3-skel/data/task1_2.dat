@@ -1,0 +1,16 @@
+# Average execution times (ms) of incrementers with N threads
+# Column 1: Threads
+# Column 2: Uniform 1:1:8 = A1
+# Column 3: Uniform 1:1:0 = A2
+# Column 4: Normal 1:1:8 = B1
+# Column 5: Normal 1:1:0 = B2
+# N    A1     A2     B1    B2 
+1      831.1   1402.4  652.8   969.1
+2      1187.1  1540.2  889.8   1212.1
+4      1277.5  1687.9  990.1   1487.2
+8      1375.3  1821.3  1193.5  1622.9
+16     1697.5  2142.7  1349.7  1974.9
+32     1860.0  2553.0  1442.3  2403.6
+48     2093.7  2929.3  1698.0  2843.0
+64     2632.1  3450.6  2222.3  3249.5
+
