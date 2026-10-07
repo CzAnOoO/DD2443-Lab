@@ -206,7 +206,10 @@ public class LockFreeSkipListLocked<T extends Comparable<T>> implements LockFree
         }
         lock.lock();
         try {
-            concains = curr.value != null && x.compareTo(curr.value) == 0; // true or false
+            if (curr.value != null && x.compareTo(curr.value) == 0) {
+                curr.next[bottomLevel].get(marked);
+                concains = !marked[0]; // om curr fortfarande inte är markerad
+            }
             timestamp = System.nanoTime();
             log.add(new Log.Entry(Log.Method.CONTAINS, (Integer) x, concains, timestamp));
         } finally {

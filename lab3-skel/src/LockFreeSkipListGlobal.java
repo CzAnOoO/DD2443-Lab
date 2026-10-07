@@ -147,6 +147,7 @@ public class LockFreeSkipListGlobal<T extends Comparable<T>> implements LockFree
 
     public boolean contains(int threadId, T x) {
         long timestamp;
+        boolean concains = false;
         int bottomLevel = 0;
         int key = x.hashCode();
         boolean[] marked = { false };
@@ -169,7 +170,10 @@ public class LockFreeSkipListGlobal<T extends Comparable<T>> implements LockFree
                 }
             }
         }
-        boolean concains = curr.value != null && x.compareTo(curr.value) == 0; // true or false
+        if (curr.value != null && x.compareTo(curr.value) == 0) {
+            curr.next[bottomLevel].get(marked);
+            concains = !marked[0];
+        }
         timestamp = System.nanoTime();
         log.add(new Log.Entry(Log.Method.CONTAINS, (Integer) x, concains, timestamp));
         return concains;
