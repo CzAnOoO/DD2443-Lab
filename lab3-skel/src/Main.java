@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Main {
 
-        public static void main(String [] args) {
+        public static void main(String[] args) {
                 // Number of threads to use
                 int threads = Integer.parseInt(args[0]);
 
@@ -20,21 +20,20 @@ public class Main {
 
                 // Distribution of adds/removes/contains
                 int[] ops = Arrays.stream(args[4].split(":"))
-                        .mapToInt(v -> Integer.parseInt(v)).toArray();
-                
+                                .mapToInt(v -> Integer.parseInt(v)).toArray();
+
                 // Number of operations executed per thread.
                 int opsPerThread = Integer.parseInt(args[5]);
 
                 // Warm up rounds
                 int warmups = Integer.parseInt(args[6]);
-                
+
                 // Measurement rounds
                 int measurements = Integer.parseInt(args[7]);
 
                 LockFreeSet<Integer> set = getSet(setName, threads);
                 Distribution opsDistribution = new Distribution.Discrete(42, ops);
                 Distribution valuesDistribution = getDistribution(distributionName, maxValue);
-
 
                 if (ops.length != 3) {
                         System.err.println("ERROR: Distribution of operations is " + args[3]);
@@ -53,41 +52,54 @@ public class Main {
                 for (int i = 0; i < warmups; ++i) {
                         long time = Experiment.run(threads, opsPerThread, set, opsDistribution, valuesDistribution);
                         int discrepancy = Log.validate(set.getLog());
+                        set.reset();
                         System.err.println("Warmup time: " + time);
                         System.err.println("Warmup discrepancy: " + discrepancy);
                 }
 
+                long sumTime = 0;
+                long sumDiscrepancy = 0;
                 for (int i = 0; i < measurements; ++i) {
                         long time = Experiment.run(threads, opsPerThread, set, opsDistribution, valuesDistribution);
                         int discrepancy = Log.validate(set.getLog());
-                        System.err.println("Measurement time: " + time);
-                        System.err.println("Measurement discrepancy: " + discrepancy);
+                        set.reset();
+                        // System.err.println("Measurement time: " + time);
+                        // System.err.println("Measurement discrepancy: " + discrepancy);
+                        sumTime += time;
+                        sumDiscrepancy += discrepancy;
                 }
+                double avgTimeMs = (sumTime / (double) measurements) / 1000000.0;
+                double avgDiscrepancy = sumDiscrepancy / (double) measurements;
+                System.out.println("Average measurement time (ms): " + avgTimeMs);
+                System.out.println("Average measurement discrepancy: " + avgDiscrepancy);
         }
 
         public static Distribution getDistribution(String name, int maxValue) {
                 switch (name) {
-                case "Uniform": 
-                        return new Distribution.Uniform(0xdeadbeef, 0, maxValue);
-                case "Normal":
-                        return new Distribution.Normal(0xcafecafe, 10, 0, maxValue);
-                default: 
-                        return null;
+                        case "Uniform":
+                                return new Distribution.Uniform(0xdeadbeef, 0, maxValue);
+                        case "Normal":
+                                return new Distribution.Normal(0xcafecafe, 10, 0, maxValue);
+                        default:
+                                return null;
                 }
         }
 
         public static LockFreeSet<Integer> getSet(String name, int threads) {
                 switch (name) {
-                case "Default": 
-                        return new LockFreeSkipList();
-                case "Locked":
-                        // TODO: Add your own set
-                case "LocalLog":
-                        // TODO: Add your own set
-                case "GlobalLog":
-                        // TODO: Add your own set
-                default: 
-                        return null;
+                        case "Default":
+                                return new LockFreeSkipList();
+                        case "Locked":
+                                // TODO: Add your own set
+                                return new LockFreeSkipListLocked();
+                        case "LocalLog":
+                                // TODO: Add your own set
+                                return new LockFreeSkipListLocal(threads);
+                        case "GlobalLog":
+                                // TODO: Add your own set
+                                return new LockFreeSkipListGlobal();
+                        default:
+                                return null;
                 }
         }
 }
