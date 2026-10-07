@@ -75,6 +75,9 @@ public class LockFreeSkipListLocked<T extends Comparable<T>> implements LockFree
             if (found) {
                 lock.lock();
                 try {
+                    if (succs[bottomLevel].next[bottomLevel].isMarked()) {
+                        continue;
+                    }
                     timestamp = System.nanoTime();
                     log.add(new Log.Entry(Log.Method.ADD, (Integer) x, false, timestamp));
                 } finally {
@@ -121,11 +124,16 @@ public class LockFreeSkipListLocked<T extends Comparable<T>> implements LockFree
         Node<T>[] preds = (Node<T>[]) new Node[MAX_LEVEL + 1];
         Node<T>[] succs = (Node<T>[]) new Node[MAX_LEVEL + 1];
         Node<T> succ;
+        boolean[] marked = { false };
         while (true) {
             boolean found = find(x, preds, succs);
             if (!found) {
                 lock.lock();
                 try {
+                    succ = preds[bottomLevel].next[bottomLevel].get(marked);
+                    if (succ != succs[bottomLevel]) {
+                        continue;
+                    }
                     timestamp = System.nanoTime();
                     log.add(new Log.Entry(Log.Method.REMOVE, (Integer) x, false, timestamp));
                 } finally {
@@ -135,14 +143,12 @@ public class LockFreeSkipListLocked<T extends Comparable<T>> implements LockFree
             } else {
                 Node<T> nodeToRemove = succs[bottomLevel];
                 for (int level = nodeToRemove.topLevel; level >= bottomLevel + 1; level--) {
-                    boolean[] marked = { false };
                     succ = nodeToRemove.next[level].get(marked);
                     while (!marked[0]) {
                         nodeToRemove.next[level].compareAndSet(succ, succ, false, true);
                         succ = nodeToRemove.next[level].get(marked);
                     }
                 }
-                boolean[] marked = { false };
                 succ = nodeToRemove.next[bottomLevel].get(marked);
                 boolean iMarkedIt;
                 boolean alreadyMark;
