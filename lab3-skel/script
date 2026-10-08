@@ -3,7 +3,7 @@
 #SBATCH -J lab1
 #SBATCH -A edu26.dd2443
 # Reservation if needed
-#SBATCH -t 00:50:00
+#SBATCH -t 02:40:00
 #SBATCH -p shared
 #SBATCH -n 1
 #SBATCH -c 64
